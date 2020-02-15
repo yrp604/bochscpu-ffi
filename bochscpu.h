@@ -30,61 +30,31 @@ int bochscpu_mem_write_virt(gpa_t, gpa_t, hva_t, size_t);
 /// hooks
 ///
 
-void bochscpu_hook_after_execution(void (*)(uint32_t, void *));
-void bochscpu_hook_after_execution_clear(void);
+typedef void * ffi_hook_ctx;
 
-void bochscpu_hook_before_execution(void (*)(uint32_t, void *));
-void bochscpu_hook_before_execution_clear(void);
+ffi_hook_ctx bochscpu_hook_new(void);
+void bochscpu_hook_delete(ffi_hook_ctx);
 
-void bochscpu_hook_cache_cntrl(void (*)(uint32_t, uint32_t));
-void bochscpu_hook_cache_cntrl_clear(void);
+void bochscpu_hook_set_ctx(ffi_hook_ctx, void*);
+void* bochscpu_hook_ctx(ffi_hook_ctx);
 
-void bochscpu_hook_clflush(void (*)(uint32_t, gva_t, gpa_t));
-void bochscpu_hook_clflush_clear(void);
-
-void bochscpu_hook_cnear_branch_not_taken(void (*)(uint32_t, gva_t));
-void bochscpu_hook_cnear_branch_not_taken_clear(void);
-
-void bochscpu_hook_cnear_branch_taken(void (*)(uint32_t, gva_t, gva_t));
-void bochscpu_hook_cnear_branch_taken_clear(void);
-
-void bochscpu_hook_exception(void (*)(uint32_t, uint32_t, uint32_t));
-void bochscpu_hook_exception_clear(void);
-
-void bochscpu_hook_far_branch(void (*)(uint32_t, uint32_t, uint16_t, gva_t, uint16_t, gva_t));
-void bochscpu_hook_far_branch_clear(void);
-
-void bochscpu_hook_hlt(void (*)(uint32_t));
-void bochscpu_hook_hlt_clear(void);
-
-void bochscpu_hook_hw_interrupt(void (*)(uint32_t, uint32_t, uint16_t, gva_t));
-void bochscpu_hook_hw_interrupt(void);
-
-void bochscpu_hook_inp(void (*)(uint16_t, size_t));
-void bochscpu_hook_inp_clear(void);
-
-void bochscpu_hook_inp2(void (*)(uint16_t, size_t, uint32_t));
-void bochscpu_hook_inp2_clear(void);
-
-void bochscpu_hook_interrupt(void (*)(uint32_t, uint32_t));
-void bochscpu_hook_interrupt_clear(void);
-
-void bochscpu_hook_lin_access(void (*)(uint32_t, gva_t, gpa_t, size_t, uint32_t, uint32_t));
-void bochscpu_hook_lin_access_clear(void);
-
-void bochcpu_hook_mwait(void (*)(uint32_t, gpa_t, size_t, uint32_t));
-void bochcpu_hook_mwait_clear(void);
-
-void bochscpu_hook_opcode(void (*)(uint32_t, void *, const uint8_t *, size_t, uint32_t, uint32_t));
-void bochscpu_hook_opcode_clear(void);
-
-void bochscpu_hook_outp(void (*)(uint16_t, size_t, uint32_t));
-void bochscpu_hook_outp_clear(void);
-
-void bochscpu_hook_phy_access(void (*)(uint32_t, gpa_t, size_t, uint32_t, uint32_t));
-void bochscpu_hook_phy_access_clear(void);
-
-
-void bochscpu_hook_clear(void);
-
-// TODO the rest of these
+void bochscpu_hook_after_execution(ffi_hook_ctx, void (*)(void *, uint32_t, void *));
+void bochscpu_hook_before_execution(ffi_hook_ctx, void (*)(void *, uint32_t, void *));
+void bochscpu_hook_cache_cntrl(ffi_hook_ctx, void (*)(void *, uint32_t, uint32_t));
+void bochscpu_hook_clflush(ffi_hook_ctx, void (*)(void *, uint32_t, gva_t, gpa_t));
+void bochscpu_hook_cnear_branch_not_taken(void (*)(void *, uint32_t, gva_t));
+void bochscpu_hook_cnear_branch_taken(ffi_hook_ctx, void (*)(void *, uint32_t, gva_t, gva_t));
+void bochscpu_hook_exception(ffi_hook_ctx, void (*)(void *, uint32_t, uint32_t, uint32_t));
+void bochscpu_hook_far_branch(ffi_hook_ctx, void (*)(void *, uint32_t, uint32_t, uint16_t, gva_t, uint16_t, gva_t));
+void bochscpu_hook_hlt(ffi_hook_ctx, void (*)(void *, uint32_t));
+void bochscpu_hook_hw_interrupt(ffi_hook_ctx, void (*)(void *, uint32_t, uint32_t, uint16_t, gva_t));
+void bochscpu_hook_inp(ffi_hook_ctx, void (*)(void *, uint16_t, size_t));
+void bochscpu_hook_inp2(ffi_hook_ctx, void (*)(void *, uint16_t, size_t, uint32_t));
+void bochscpu_hook_interrupt(ffi_hook_ctx, void (*)(void *, uint32_t, uint32_t));
+void bochscpu_hook_lin_access(ffi_hook_ctx, void (*)(void *, uint32_t, gva_t, gpa_t, size_t, uint32_t, uint32_t));
+void bochcpu_hook_mwait(ffi_hook_ctx, void (*)(void *, uint32_t, gpa_t, size_t, uint32_t));
+void bochscpu_hook_opcode(ffi_hook_ctx, void (*)(void *, uint32_t, void *, const uint8_t *, size_t, uint32_t, uint32_t));
+void bochscpu_hook_outp(ffi_hook_ctx, void (*)(void *, uint16_t, size_t, uint32_t));
+void bochscpu_hook_phy_access(ffi_hook_ctx, void (*)(void *, uint32_t, gpa_t, size_t, uint32_t, uint32_t));
+void bochscpu_hook_prefetch_hint(ffi_hook_ctx, void (*)(void *, uint32_t, uint32_t, uint32_t, uint64_t));
+// TODO: the rest

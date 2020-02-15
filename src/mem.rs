@@ -71,7 +71,7 @@ pub unsafe extern "C" fn bochscpu_mem_virt_translate(cr3: u64, gva: u64) -> u64 
 ///
 /// # Panics
 ///
-/// If the GPA does not exist, it will called the missing page function. If
+/// If the GPA does not exist, it will call the missing page function. If
 /// that function does not exist or does not resolve the fault, this routine
 /// will panic
 #[no_mangle]
@@ -84,7 +84,7 @@ pub unsafe extern "C" fn bochscpu_mem_phy_read(gpa: u64, hva: *mut u8, sz: usize
 ///
 /// # Panics
 ///
-/// If the GPA does not exist, it will called the missing page function. If
+/// If the GPA does not exist, it will call the missing page function. If
 /// that function does not exist or does not resolve the fault, this routine
 /// will panic
 #[no_mangle]
