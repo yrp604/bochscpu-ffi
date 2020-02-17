@@ -6,16 +6,16 @@ use bochscpu::mem::*;
 ///
 /// If the GPA was already mapped, this replaces the existing mapping
 #[no_mangle]
-pub unsafe extern "C" fn bochscpu_mem_add_page(gpa: u64, hva: *mut u8) {
-    add_page(gpa, hva)
+pub unsafe extern "C" fn bochscpu_mem_page_insert(gpa: u64, hva: *mut u8) {
+    page_insert(gpa, hva)
 }
 
 /// Delete GPA mapping
 ///
 /// If the GPA is not valid, this is a no-op.
 #[no_mangle]
-pub unsafe extern "C" fn bochscpu_mem_del_page(gpa: u64) {
-    del_page(gpa)
+pub unsafe extern "C" fn bochscpu_mem_page_remove(gpa: u64) {
+    page_remove(gpa)
 }
 
 /// Install a physical page fault handler

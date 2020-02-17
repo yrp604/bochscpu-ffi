@@ -8,6 +8,8 @@
 
 mod hook;
 mod mem;
+mod cpu;
 
 pub use hook::*;
 pub use mem::*;
+pub use cpu::*;
