@@ -6,6 +6,7 @@ use bochscpu::{Address, PhyAddress};
 use bochscpu::hook::*;
 
 #[derive(Clone, Debug, Eq, Hash, PartialEq)]
+#[repr(C)]
 struct FfiHooks {
     pub ctx: *mut c_void,
 

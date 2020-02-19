@@ -32,6 +32,9 @@ int bochscpu_mem_write_virt(gpa_t, gpa_t, hva_t, size_t);
 cpu_t bochscpu_cpu_new(uint32_t);
 void bochscpu_cpu_delete(cpu_t);
 
+uint64_t bochscpu_cpu_rax(cpu_t);
+void bochscpu_cpu_set_rax(cpu_t, uint64_t);
+
 ///
 /// hooks
 ///

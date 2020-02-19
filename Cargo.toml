@@ -10,3 +10,6 @@ crate-type = ["staticlib", "cdylib"]
 
 [dependencies]
 bochscpu = { path = "../bochscpu" }
+
+[build-dependencies]
+cbindgen = "0.13"
