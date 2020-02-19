@@ -8,7 +8,6 @@ use crate::hook::FfiHooks;
 
 pub type FfiCpu = *mut c_void;
 
-
 /// Create a new Cpu
 ///
 /// Create a new Cpu with the specified id. If SMP is not enabled, the id is
@@ -18,7 +17,6 @@ pub unsafe extern "C" fn bochscpu_cpu_new(id: u32) -> FfiCpu {
     let c = Box::new(Cpu::new(id));
     Box::into_raw(c) as _
 }
-
 
 /// Delete a cpu
 #[no_mangle]
@@ -42,7 +40,9 @@ pub unsafe extern "C" fn bochscpu_cpu_run(p: FfiCpu, h: *mut *mut FfiHooks) {
         let mut ii = h;
 
         loop {
-            if *ii == ptr::null_mut() { break; }
+            if *ii == ptr::null_mut() {
+                break;
+            }
 
             prep = prep.register(&mut **ii);
             ii = ii.add(1);
