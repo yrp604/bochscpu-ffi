@@ -21,9 +21,8 @@ pub unsafe extern "C" fn bochscpu_mem_page_remove(gpa: u64) {
 /// Install a physical page fault handler
 ///
 /// This function will be called any time a request is made to physical memory
-/// and the GPA is not present. This function should either:
-/// - Add a page using `bochscpu_mem_add_page()`
-/// - Stop emulating using `bochscpu_cpu_set_run_state()`
+/// and the GPA is not present. This function should add a page using
+/// `bochscpu_mem_page_insert()`
 ///
 /// The paramter should have the type `void handler(gpa_t)`
 ///
@@ -58,7 +57,7 @@ pub unsafe extern "C" fn bochscpu_mem_phy_translate(gpa: u64) -> *mut u8 {
 ///
 /// # Returns
 ///
-/// translated gpa on success, -1 on failure
+/// Translated gpa on success, -1 on failure
 #[no_mangle]
 pub unsafe extern "C" fn bochscpu_mem_virt_translate(cr3: u64, gva: u64) -> u64 {
     match virt_translate_checked(cr3, gva) {
@@ -99,9 +98,14 @@ pub unsafe extern "C" fn bochscpu_mem_phy_write(gpa: u64, hva: *const u8, sz: us
 ///
 /// # Returns
 ///
-/// zero on success, non-zero on failure
+/// Zero on success, non-zero on failure
 #[no_mangle]
-pub unsafe extern "C" fn bochscpu_mem_virt_write(cr3: u64, gva: u64, hva: *const u8, sz: usize) -> i32 {
+pub unsafe extern "C" fn bochscpu_mem_virt_write(
+    cr3: u64,
+    gva: u64,
+    hva: *const u8,
+    sz: usize,
+) -> i32 {
     let s = slice::from_raw_parts(hva, sz);
 
     match virt_write_checked(cr3, gva, s) {
@@ -116,9 +120,14 @@ pub unsafe extern "C" fn bochscpu_mem_virt_write(cr3: u64, gva: u64, hva: *const
 ///
 /// # Returns
 ///
-/// zero on success, non-zero on failure
+/// Zero on success, non-zero on failure
 #[no_mangle]
-pub unsafe extern "C" fn bochscpu_mem_virt_read(cr3: u64, gva: u64, hva: *mut u8, sz: usize) -> i32 {
+pub unsafe extern "C" fn bochscpu_mem_virt_read(
+    cr3: u64,
+    gva: u64,
+    hva: *mut u8,
+    sz: usize,
+) -> i32 {
     let s = slice::from_raw_parts_mut(hva, sz);
 
     match virt_read_slice_checked(cr3, gva, s) {

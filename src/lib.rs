@@ -1,3 +1,4 @@
+mod cpu;
 /// Terminology:
 /// - Guest: the target being emulated
 /// - GPA: Guest Physical Address, the guests physical address space
@@ -5,11 +6,9 @@
 ///   using the guest page tables and a particular cr3.
 /// - HVA: Host Virtual Address, an address valid in the emulator itself, NOT
 ///   the guest
-
 mod hook;
 mod mem;
-mod cpu;
 
+pub use cpu::*;
 pub use hook::*;
 pub use mem::*;
-pub use cpu::*;
