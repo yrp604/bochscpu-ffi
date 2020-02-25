@@ -65,7 +65,6 @@ impl Hooks for bochscpu_ffi_hooks {
         self.mwait.map(|f| f(self.ctx, id, addr, len, flags));
     }
 
-
     fn cnear_branch_taken(&mut self, id: u32, branch_pc: Address, new_pc: Address) {
         self.cnear_branch_taken
             .map(|f| f(self.ctx, id, branch_pc, new_pc));
@@ -100,7 +99,6 @@ impl Hooks for bochscpu_ffi_hooks {
         });
     }
 
-
     fn opcode(&mut self, id: u32, ins: *mut c_void, opcode: &[u8], is_32: bool, is_64: bool) {
         self.opcode.map(|f| {
             f(
@@ -128,7 +126,6 @@ impl Hooks for bochscpu_ffi_hooks {
             .map(|f| f(self.ctx, id, vector, pc.0, pc.1));
     }
 
-
     fn tlb_cntrl(&mut self, id: u32, what: TlbCntrl, new_cr: Option<PhyAddress>) {
         let cr = match new_cr {
             Some(v) => v,
@@ -142,13 +139,13 @@ impl Hooks for bochscpu_ffi_hooks {
     }
 
     fn prefetch_hint(&mut self, id: u32, what: PrefetchHint, seg: u32, off: Address) {
-        self.prefetch_hint.map(|f| f(self.ctx, id, what as u32, seg, off));
+        self.prefetch_hint
+            .map(|f| f(self.ctx, id, what as u32, seg, off));
     }
 
     fn clflush(&mut self, id: u32, vaddr: Address, paddr: PhyAddress) {
         self.clflush.map(|f| f(self.ctx, id, vaddr, paddr));
     }
-
 
     fn before_execution(&mut self, id: u32, ins: *mut c_void) {
         self.before_execution.map(|f| f(self.ctx, id, ins));
@@ -162,7 +159,6 @@ impl Hooks for bochscpu_ffi_hooks {
         self.repeat_iteration.map(|f| f(self.ctx, id, ins));
     }
 
-
     fn inp(&mut self, addr: u16, len: usize) {
         self.inp.map(|f| f(self.ctx, addr, len));
     }
@@ -174,7 +170,6 @@ impl Hooks for bochscpu_ffi_hooks {
     fn outp(&mut self, addr: u16, len: usize, val: u32) {
         self.outp.map(|f| f(self.ctx, addr, len, val));
     }
-
 
     fn lin_access(
         &mut self,
@@ -201,11 +196,9 @@ impl Hooks for bochscpu_ffi_hooks {
             .map(|f| f(self.ctx, id, paddr, len, memty as u32, rw as u32));
     }
 
-
     fn wrmsr(&mut self, id: u32, msr: u32, val: u64) {
         self.wrmsr.map(|f| f(self.ctx, id, msr, val));
     }
-
 
     fn vmexit(&mut self, id: u32, reason: u32, qualification: u64) {
         self.vmexit.map(|f| f(self.ctx, id, reason, qualification));

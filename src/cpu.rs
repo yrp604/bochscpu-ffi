@@ -304,7 +304,11 @@ pub unsafe extern "C" fn bochscpu_cpu_zmm(p: bochscpu_cpu, idx: usize, z: *mut b
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn bochscpu_cpu_set_zmm(p: bochscpu_cpu, idx: usize, z: *const bochscpu_cpu_zmm) {
+pub unsafe extern "C" fn bochscpu_cpu_set_zmm(
+    p: bochscpu_cpu,
+    idx: usize,
+    z: *const bochscpu_cpu_zmm,
+) {
     let c: Box<Cpu> = Box::from_raw(p as _);
 
     c.set_zmm(idx, *z);
