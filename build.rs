@@ -7,12 +7,16 @@ fn main() {
 
     cbindgen::Builder::new()
         .with_crate(&crate_dir)
+        .with_parse_deps(true)
+        .with_parse_include(&["bochscpu"])
         .generate()
         .expect("Unable to generate bindings")
         .write_to_file("bochscpu.hpp");
 
     cbindgen::Builder::new()
         .with_crate(&crate_dir)
+        .with_parse_deps(true)
+        .with_parse_include(&["bochscpu"])
         .with_language(cbindgen::Language::C)
         .generate()
         .expect("Unable to generate bindings")

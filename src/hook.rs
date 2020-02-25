@@ -11,9 +11,10 @@ use bochscpu::{Address, PhyAddress};
 /// If the hook value is NULL it will be treated as a no-op. The value of the
 /// ctx field will be passed as the first paramter to every hook and is fully
 /// controlled by the API author
+#[allow(non_camel_case_types)]
 #[derive(Clone, Debug, Eq, Hash, PartialEq)]
 #[repr(C)]
-pub struct FfiHooks {
+pub struct bochscpu_ffi_hooks {
     pub ctx: *mut c_void,
 
     pub reset: Option<extern "C" fn(*mut c_void, u32, u32)>,
@@ -51,7 +52,7 @@ pub struct FfiHooks {
     pub vmexit: Option<extern "C" fn(*mut c_void, u32, u32, u64)>,
 }
 
-impl Hooks for FfiHooks {
+impl Hooks for bochscpu_ffi_hooks {
     fn reset(&mut self, id: u32, ty: u32) {
         self.reset.map(|f| f(self.ctx, id, ty));
     }
