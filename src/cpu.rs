@@ -92,7 +92,6 @@ pub unsafe extern "C" fn bochscpu_cpu_set_state(p: bochscpu_cpu, s: *const bochs
     mem::forget(c);
 }
 
-/// Get rax
 #[no_mangle]
 pub unsafe extern "C" fn bochscpu_cpu_rax(p: bochscpu_cpu) -> u64 {
     let c: Box<Cpu> = Box::from_raw(p as _);
@@ -104,12 +103,351 @@ pub unsafe extern "C" fn bochscpu_cpu_rax(p: bochscpu_cpu) -> u64 {
     r
 }
 
-/// Set rax
 #[no_mangle]
 pub unsafe extern "C" fn bochscpu_cpu_set_rax(p: bochscpu_cpu, val: u64) {
     let c: Box<Cpu> = Box::from_raw(p as _);
 
     c.set_rax(val);
+
+    mem::forget(c);
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn bochscpu_cpu_rcx(p: bochscpu_cpu) -> u64 {
+    let c: Box<Cpu> = Box::from_raw(p as _);
+
+    let r = c.rcx();
+
+    mem::forget(c);
+
+    r
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn bochscpu_cpu_set_rcx(p: bochscpu_cpu, val: u64) {
+    let c: Box<Cpu> = Box::from_raw(p as _);
+
+    c.set_rcx(val);
+
+    mem::forget(c);
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn bochscpu_cpu_rdx(p: bochscpu_cpu) -> u64 {
+    let c: Box<Cpu> = Box::from_raw(p as _);
+
+    let r = c.rdx();
+
+    mem::forget(c);
+
+    r
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn bochscpu_cpu_set_rdx(p: bochscpu_cpu, val: u64) {
+    let c: Box<Cpu> = Box::from_raw(p as _);
+
+    c.set_rdx(val);
+
+    mem::forget(c);
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn bochscpu_cpu_rbx(p: bochscpu_cpu) -> u64 {
+    let c: Box<Cpu> = Box::from_raw(p as _);
+
+    let r = c.rbx();
+
+    mem::forget(c);
+
+    r
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn bochscpu_cpu_set_rbx(p: bochscpu_cpu, val: u64) {
+    let c: Box<Cpu> = Box::from_raw(p as _);
+
+    c.set_rbx(val);
+
+    mem::forget(c);
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn bochscpu_cpu_rsp(p: bochscpu_cpu) -> u64 {
+    let c: Box<Cpu> = Box::from_raw(p as _);
+
+    let r = c.rsp();
+
+    mem::forget(c);
+
+    r
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn bochscpu_cpu_set_rsp(p: bochscpu_cpu, val: u64) {
+    let c: Box<Cpu> = Box::from_raw(p as _);
+
+    c.set_rsp(val);
+
+    mem::forget(c);
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn bochscpu_cpu_rbp(p: bochscpu_cpu) -> u64 {
+    let c: Box<Cpu> = Box::from_raw(p as _);
+
+    let r = c.rbp();
+
+    mem::forget(c);
+
+    r
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn bochscpu_cpu_set_rbp(p: bochscpu_cpu, val: u64) {
+    let c: Box<Cpu> = Box::from_raw(p as _);
+
+    c.set_rbp(val);
+
+    mem::forget(c);
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn bochscpu_cpu_rsi(p: bochscpu_cpu) -> u64 {
+    let c: Box<Cpu> = Box::from_raw(p as _);
+
+    let r = c.rsi();
+
+    mem::forget(c);
+
+    r
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn bochscpu_cpu_set_rsi(p: bochscpu_cpu, val: u64) {
+    let c: Box<Cpu> = Box::from_raw(p as _);
+
+    c.set_rsi(val);
+
+    mem::forget(c);
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn bochscpu_cpu_rdi(p: bochscpu_cpu) -> u64 {
+    let c: Box<Cpu> = Box::from_raw(p as _);
+
+    let r = c.rdi();
+
+    mem::forget(c);
+
+    r
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn bochscpu_cpu_set_rdi(p: bochscpu_cpu, val: u64) {
+    let c: Box<Cpu> = Box::from_raw(p as _);
+
+    c.set_rdi(val);
+
+    mem::forget(c);
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn bochscpu_cpu_r8(p: bochscpu_cpu) -> u64 {
+    let c: Box<Cpu> = Box::from_raw(p as _);
+
+    let r = c.r8();
+
+    mem::forget(c);
+
+    r
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn bochscpu_cpu_set_r8(p: bochscpu_cpu, val: u64) {
+    let c: Box<Cpu> = Box::from_raw(p as _);
+
+    c.set_r8(val);
+
+    mem::forget(c);
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn bochscpu_cpu_r9(p: bochscpu_cpu) -> u64 {
+    let c: Box<Cpu> = Box::from_raw(p as _);
+
+    let r = c.r9();
+
+    mem::forget(c);
+
+    r
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn bochscpu_cpu_set_r9(p: bochscpu_cpu, val: u64) {
+    let c: Box<Cpu> = Box::from_raw(p as _);
+
+    c.set_r9(val);
+
+    mem::forget(c);
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn bochscpu_cpu_r10(p: bochscpu_cpu) -> u64 {
+    let c: Box<Cpu> = Box::from_raw(p as _);
+
+    let r = c.r10();
+
+    mem::forget(c);
+
+    r
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn bochscpu_cpu_set_r10(p: bochscpu_cpu, val: u64) {
+    let c: Box<Cpu> = Box::from_raw(p as _);
+
+    c.set_r10(val);
+
+    mem::forget(c);
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn bochscpu_cpu_r11(p: bochscpu_cpu) -> u64 {
+    let c: Box<Cpu> = Box::from_raw(p as _);
+
+    let r = c.r11();
+
+    mem::forget(c);
+
+    r
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn bochscpu_cpu_set_r11(p: bochscpu_cpu, val: u64) {
+    let c: Box<Cpu> = Box::from_raw(p as _);
+
+    c.set_r11(val);
+
+    mem::forget(c);
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn bochscpu_cpu_r12(p: bochscpu_cpu) -> u64 {
+    let c: Box<Cpu> = Box::from_raw(p as _);
+
+    let r = c.r12();
+
+    mem::forget(c);
+
+    r
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn bochscpu_cpu_set_r12(p: bochscpu_cpu, val: u64) {
+    let c: Box<Cpu> = Box::from_raw(p as _);
+
+    c.set_r12(val);
+
+    mem::forget(c);
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn bochscpu_cpu_r13(p: bochscpu_cpu) -> u64 {
+    let c: Box<Cpu> = Box::from_raw(p as _);
+
+    let r = c.r13();
+
+    mem::forget(c);
+
+    r
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn bochscpu_cpu_set_r13(p: bochscpu_cpu, val: u64) {
+    let c: Box<Cpu> = Box::from_raw(p as _);
+
+    c.set_r13(val);
+
+    mem::forget(c);
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn bochscpu_cpu_r14(p: bochscpu_cpu) -> u64 {
+    let c: Box<Cpu> = Box::from_raw(p as _);
+
+    let r = c.r14();
+
+    mem::forget(c);
+
+    r
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn bochscpu_cpu_set_r14(p: bochscpu_cpu, val: u64) {
+    let c: Box<Cpu> = Box::from_raw(p as _);
+
+    c.set_r14(val);
+
+    mem::forget(c);
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn bochscpu_cpu_r15(p: bochscpu_cpu) -> u64 {
+    let c: Box<Cpu> = Box::from_raw(p as _);
+
+    let r = c.r15();
+
+    mem::forget(c);
+
+    r
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn bochscpu_cpu_set_r15(p: bochscpu_cpu, val: u64) {
+    let c: Box<Cpu> = Box::from_raw(p as _);
+
+    c.set_r15(val);
+
+    mem::forget(c);
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn bochscpu_cpu_rip(p: bochscpu_cpu) -> u64 {
+    let c: Box<Cpu> = Box::from_raw(p as _);
+
+    let r = c.rip();
+
+    mem::forget(c);
+
+    r
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn bochscpu_cpu_set_rip(p: bochscpu_cpu, val: u64) {
+    let c: Box<Cpu> = Box::from_raw(p as _);
+
+    c.set_rip(val);
+
+    mem::forget(c);
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn bochscpu_cpu_rflags(p: bochscpu_cpu) -> u64 {
+    let c: Box<Cpu> = Box::from_raw(p as _);
+
+    let r = c.rflags();
+
+    mem::forget(c);
+
+    r
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn bochscpu_cpu_set_rflags(p: bochscpu_cpu, val: u64) {
+    let c: Box<Cpu> = Box::from_raw(p as _);
+
+    c.set_rflags(val);
 
     mem::forget(c);
 }
@@ -294,6 +632,8 @@ pub unsafe extern "C" fn bochscpu_cpu_set_idtr(p: bochscpu_cpu, s: *const bochsc
     mem::forget(c);
 }
 
+// TODO crX/drX
+
 #[no_mangle]
 pub unsafe extern "C" fn bochscpu_cpu_zmm(p: bochscpu_cpu, idx: usize, z: *mut bochscpu_cpu_zmm) {
     let c: Box<Cpu> = Box::from_raw(p as _);
@@ -315,3 +655,5 @@ pub unsafe extern "C" fn bochscpu_cpu_set_zmm(
 
     mem::forget(c);
 }
+
+// TODO fp/msr
