@@ -2,7 +2,7 @@ use std::ffi::c_void;
 use std::mem;
 use std::ptr;
 
-use bochscpu::cpu::{Cpu, GlobalSeg, Seg, State, Zmm};
+use bochscpu::cpu::*;
 
 use crate::hook::bochscpu_ffi_hooks;
 
@@ -37,8 +37,8 @@ pub unsafe extern "C" fn bochscpu_cpu_delete(p: bochscpu_cpu) {
 
 /// Start emulation
 ///
-/// To hook emulation, pass in a NULL terminated list of pointers to FfiHook
-/// structs.
+/// To hook emulation, pass in a NULL terminated list of one or more pointers to
+/// bochscpu_ffi_hooks structs.
 #[no_mangle]
 pub unsafe extern "C" fn bochscpu_cpu_run(p: bochscpu_cpu, h: *mut *mut bochscpu_ffi_hooks) {
     let c: Box<Cpu> = Box::from_raw(p as _);
@@ -59,6 +59,19 @@ pub unsafe extern "C" fn bochscpu_cpu_run(p: bochscpu_cpu, h: *mut *mut bochscpu
     }
 
     prep.run();
+
+    mem::forget(c);
+}
+
+/// Stop emulation
+///
+#[no_mangle]
+pub unsafe extern "C" fn bochscpu_cpu_stop(p: bochscpu_cpu) {
+    let c: Box<Cpu> = Box::from_raw(p as _);
+
+    c.set_run_state(RunState::Stop);
+
+    mem::forget(c);
 }
 
 #[no_mangle]
