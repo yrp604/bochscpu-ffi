@@ -3,6 +3,11 @@ use std::ffi::c_void;
 use bochscpu::hook::*;
 use bochscpu::{Address, PhyAddress};
 
+pub const BOCHSCPU_HOOK_MEM_READ: u32 = 0;
+pub const BOCHSCPU_HOOK_MEM_WRITE: u32 = 1;
+pub const BOCHSCPU_HOOK_MEM_EXECUTE: u32 = 2;
+pub const BOCHSCPU_HOOK_MEM_RW: u32 = 3;
+
 /// FFI Hook object
 ///
 /// Full desciptions of hook points can be found here:
@@ -14,7 +19,7 @@ use bochscpu::{Address, PhyAddress};
 #[allow(non_camel_case_types)]
 #[derive(Clone, Debug, Eq, Hash, PartialEq)]
 #[repr(C)]
-pub struct bochscpu_ffi_hooks_t {
+pub struct bochscpu_hooks_t {
     pub ctx: *mut c_void,
 
     pub reset: Option<extern "C" fn(*mut c_void, u32, u32)>,
@@ -52,7 +57,7 @@ pub struct bochscpu_ffi_hooks_t {
     pub vmexit: Option<extern "C" fn(*mut c_void, u32, u32, u64)>,
 }
 
-impl Hooks for bochscpu_ffi_hooks_t {
+impl Hooks for bochscpu_hooks_t {
     fn reset(&mut self, id: u32, ty: u32) {
         self.reset.map(|f| f(self.ctx, id, ty));
     }

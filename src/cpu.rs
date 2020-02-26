@@ -4,7 +4,7 @@ use std::ptr;
 
 use bochscpu::cpu::*;
 
-use crate::hook::bochscpu_ffi_hooks_t;
+use crate::hook::bochscpu_hooks_t;
 
 #[allow(non_camel_case_types)]
 pub type bochscpu_cpu_t = *mut c_void;
@@ -54,9 +54,9 @@ pub unsafe extern "C" fn bochscpu_cpu_delete(p: bochscpu_cpu_t) {
 /// Start emulation
 ///
 /// To hook emulation, pass in a NULL terminated list of one or more pointers to
-/// bochscpu_ffi_hooks_t structs.
+/// bochscpu_hooks_t structs.
 #[no_mangle]
-pub unsafe extern "C" fn bochscpu_cpu_run(p: bochscpu_cpu_t, h: *mut *mut bochscpu_ffi_hooks_t) {
+pub unsafe extern "C" fn bochscpu_cpu_run(p: bochscpu_cpu_t, h: *mut *mut bochscpu_hooks_t) {
     let c: Box<Cpu> = Box::from_raw(p as _);
 
     let mut prep = c.prepare();
