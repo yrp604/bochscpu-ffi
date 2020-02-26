@@ -10,7 +10,7 @@ mod hook;
 mod mem;
 mod log;
 
-pub use cpu::*;
-pub use hook::*;
-pub use mem::*;
-pub use log::*;
+pub use crate::cpu::*;
+pub use crate::hook::*;
+pub use crate::mem::*;
+pub use crate::log::*;
