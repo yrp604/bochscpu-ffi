@@ -3,6 +3,7 @@ use std::ffi::c_void;
 use bochscpu::hook::*;
 use bochscpu::{Address, PhyAddress};
 
+// these have to be hard coded otherwise cbindgen wont pick up on them
 pub const BOCHSCPU_HOOK_MEM_READ: u32 = 0;
 pub const BOCHSCPU_HOOK_MEM_WRITE: u32 = 1;
 pub const BOCHSCPU_HOOK_MEM_EXECUTE: u32 = 2;
