@@ -27,6 +27,22 @@ pub unsafe extern "C" fn bochscpu_cpu_new(id: u32) -> bochscpu_cpu_t {
     Box::into_raw(c) as _
 }
 
+/// Create a new Cpu
+///
+/// Instantiate an already existing cpu with the specified id.
+#[no_mangle]
+pub unsafe extern "C" fn bochscpu_cpu_from(id: u32) -> bochscpu_cpu_t {
+    let c = Box::new(Cpu::from(id));
+    Box::into_raw(c) as _
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn bochscpu_cpu_forget(p: bochscpu_cpu_t) {
+    let c: Box<Cpu> = Box::from_raw(p as _);
+
+    mem::drop(c);
+}
+
 /// Delete a cpu
 #[no_mangle]
 pub unsafe extern "C" fn bochscpu_cpu_delete(p: bochscpu_cpu_t) {
