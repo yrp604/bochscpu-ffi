@@ -8,7 +8,9 @@
 mod cpu;
 mod hook;
 mod mem;
+mod log;
 
 pub use cpu::*;
 pub use hook::*;
 pub use mem::*;
+pub use log::*;
