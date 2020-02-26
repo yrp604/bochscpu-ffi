@@ -14,7 +14,7 @@ use bochscpu::{Address, PhyAddress};
 #[allow(non_camel_case_types)]
 #[derive(Clone, Debug, Eq, Hash, PartialEq)]
 #[repr(C)]
-pub struct bochscpu_ffi_hooks {
+pub struct bochscpu_ffi_hooks_t {
     pub ctx: *mut c_void,
 
     pub reset: Option<extern "C" fn(*mut c_void, u32, u32)>,
@@ -52,7 +52,7 @@ pub struct bochscpu_ffi_hooks {
     pub vmexit: Option<extern "C" fn(*mut c_void, u32, u32, u64)>,
 }
 
-impl Hooks for bochscpu_ffi_hooks {
+impl Hooks for bochscpu_ffi_hooks_t {
     fn reset(&mut self, id: u32, ty: u32) {
         self.reset.map(|f| f(self.ctx, id, ty));
     }
