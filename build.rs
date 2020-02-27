@@ -9,6 +9,7 @@ fn main() {
         .with_crate(&crate_dir)
         .with_parse_deps(true)
         .with_parse_include(&["bochscpu"])
+        .with_header("#pragma once")
         .generate()
         .expect("Unable to generate bindings")
         .write_to_file("bochscpu.hpp");
@@ -18,6 +19,7 @@ fn main() {
         .with_parse_deps(true)
         .with_parse_include(&["bochscpu"])
         .with_language(cbindgen::Language::C)
+        .with_header("#pragma once")
         .generate()
         .expect("Unable to generate bindings")
         .write_to_file("bochscpu.h");
