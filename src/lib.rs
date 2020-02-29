@@ -9,8 +9,10 @@ mod cpu;
 mod hook;
 mod mem;
 mod log;
+mod axel;
 
 pub use crate::cpu::*;
 pub use crate::hook::*;
 pub use crate::mem::*;
 pub use crate::log::*;
+pub use crate::axel::*;
