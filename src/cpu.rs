@@ -40,7 +40,7 @@ pub unsafe extern "C" fn bochscpu_cpu_from(id: u32) -> bochscpu_cpu_t {
 pub unsafe extern "C" fn bochscpu_cpu_forget(p: bochscpu_cpu_t) {
     let c: Box<Cpu> = Box::from_raw(p as _);
 
-    mem::forget(c);
+    mem::drop(c);
 }
 
 /// Delete a cpu
