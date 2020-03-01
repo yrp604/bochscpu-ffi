@@ -5,6 +5,10 @@ use bochscpu::mem::*;
 /// Add GPA mapping to HVA
 ///
 /// If the GPA was already mapped, this replaces the existing mapping
+///
+/// # Panics
+///
+/// Panics if the added page is not page aligned.
 #[no_mangle]
 pub unsafe extern "C" fn bochscpu_mem_page_insert(gpa: u64, hva: *mut u8) {
     page_insert(gpa, hva)
