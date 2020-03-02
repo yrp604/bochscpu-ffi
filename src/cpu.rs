@@ -38,7 +38,7 @@ pub unsafe extern "C" fn bochscpu_cpu_from(id: u32) -> bochscpu_cpu_t {
 
 #[no_mangle]
 pub unsafe extern "C" fn bochscpu_cpu_forget(p: bochscpu_cpu_t) {
-    let c: ManuallyDrop<Box<Cpu>> = ManuallyDrop::new(Box::from_raw(p as _));
+    let c: Box<Cpu> = Box::from_raw(p as _);
 
     mem::drop(c);
 }
