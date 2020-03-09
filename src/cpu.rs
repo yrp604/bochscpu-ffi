@@ -53,10 +53,9 @@ pub unsafe extern "C" fn bochscpu_cpu_delete(p: bochscpu_cpu_t) {
 
 #[no_mangle]
 pub unsafe extern "C" fn bochscpu_cpu_set_mode(p: bochscpu_cpu_t) {
-    let c: Box<Cpu> = Box::from_raw(p as _);
+    let c: ManuallyDrop<Box<Cpu>> = ManuallyDrop::new(Box::from_raw(p as _));
 
     c.set_mode();
-    mem::forget(c)
 }
 
 /// Start emulation
@@ -94,6 +93,14 @@ pub unsafe extern "C" fn bochscpu_cpu_stop(p: bochscpu_cpu_t) {
 
     c.set_run_state(RunState::Stop);
 }
+
+#[no_mangle]
+pub unsafe extern "C" fn bochscpu_cpu_bail(p: bochscpu_cpu_t) {
+    let c: ManuallyDrop<Box<Cpu>> = ManuallyDrop::new(Box::from_raw(p as _));
+
+    c.set_run_state(RunState::Bail);
+}
+
 
 #[no_mangle]
 pub unsafe extern "C" fn bochscpu_cpu_state(p: bochscpu_cpu_t, s: *mut bochscpu_cpu_state_t) {
