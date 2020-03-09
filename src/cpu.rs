@@ -51,6 +51,14 @@ pub unsafe extern "C" fn bochscpu_cpu_delete(p: bochscpu_cpu_t) {
     c.delete();
 }
 
+#[no_mangle]
+pub unsafe extern "C" fn bochscpu_cpu_set_mode(p: bochscpu_cpu_t) {
+    let c: Box<Cpu> = Box::from_raw(p as _);
+
+    c.set_mode();
+    mem::forget(c)
+}
+
 /// Start emulation
 ///
 /// To hook emulation, pass in a NULL terminated list of one or more pointers to
