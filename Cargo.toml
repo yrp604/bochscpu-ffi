@@ -13,6 +13,7 @@ bochscpu = { path = "../bochscpu", features = ["serde"] }
 log = { version = "0.4", features = ["release_max_level_off"] }
 serde = "1.0"
 serde_yaml = "0.8"
+static_assertions = "1"
 stderrlog = "0.4"
 
 [build-dependencies]

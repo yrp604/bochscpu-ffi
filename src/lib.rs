@@ -1,3 +1,6 @@
+#[macro_use]
+extern crate static_assertions;
+
 /// Terminology:
 /// - Guest: the target being emulated
 /// - GPA: Guest Physical Address, the guests physical address space

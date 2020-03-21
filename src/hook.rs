@@ -5,9 +5,17 @@ use bochscpu::{Address, PhyAddress};
 
 // these have to be hard coded otherwise cbindgen wont pick up on them
 pub const BOCHSCPU_HOOK_MEM_READ: u32 = 0;
+const_assert_eq!(BOCHSCPU_HOOK_MEM_READ, MemAccess::Read as u32);
+
 pub const BOCHSCPU_HOOK_MEM_WRITE: u32 = 1;
+const_assert_eq!(BOCHSCPU_HOOK_MEM_WRITE, MemAccess::Write as u32);
+
 pub const BOCHSCPU_HOOK_MEM_EXECUTE: u32 = 2;
+const_assert_eq!(BOCHSCPU_HOOK_MEM_EXECUTE, MemAccess::Execute as u32);
+
 pub const BOCHSCPU_HOOK_MEM_RW: u32 = 3;
+const_assert_eq!(BOCHSCPU_HOOK_MEM_RW, MemAccess::RW as u32);
+
 
 /// FFI Hook object
 ///
