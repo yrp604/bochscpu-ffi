@@ -16,6 +16,32 @@ const_assert_eq!(BOCHSCPU_HOOK_MEM_EXECUTE, MemAccess::Execute as u32);
 pub const BOCHSCPU_HOOK_MEM_RW: u32 = 3;
 const_assert_eq!(BOCHSCPU_HOOK_MEM_RW, MemAccess::RW as u32);
 
+pub const BOCHSCPU_HOOK_TLB_CR0: u32 = 10;
+const_assert_eq!(BOCHSCPU_HOOK_TLB_CR0, TlbCntrl::MovCr0 as u32);
+
+pub const BOCHSCPU_HOOK_TLB_CR3: u32 = 11;
+const_assert_eq!(BOCHSCPU_HOOK_TLB_CR3, TlbCntrl::MovCr3 as u32);
+
+pub const BOCHSCPU_HOOK_TLB_CR4: u32 = 12;
+const_assert_eq!(BOCHSCPU_HOOK_TLB_CR4, TlbCntrl::MovCr4 as u32);
+
+pub const BOCHSCPU_HOOK_TLB_TASKSWITCH: u32 = 13;
+const_assert_eq!(BOCHSCPU_HOOK_TLB_TASKSWITCH, TlbCntrl::TaskSwitch as u32);
+
+pub const BOCHSCPU_HOOK_TLB_CONTEXTSWITCH: u32 = 14;
+const_assert_eq!(BOCHSCPU_HOOK_TLB_CONTEXTSWITCH, TlbCntrl::ContextSwitch as u32);
+
+pub const BOCHSCPU_HOOK_TLB_INVLPG: u32 = 15;
+const_assert_eq!(BOCHSCPU_HOOK_TLB_INVLPG, TlbCntrl::InvLpg as u32);
+
+pub const BOCHSCPU_HOOK_TLB_INVEPT: u32 = 16;
+const_assert_eq!(BOCHSCPU_HOOK_TLB_INVEPT, TlbCntrl::InvEpt as u32);
+
+pub const BOCHSCPU_HOOK_TLB_INVVPID: u32 = 17;
+const_assert_eq!(BOCHSCPU_HOOK_TLB_INVVPID, TlbCntrl::InvVpid as u32);
+
+pub const BOCHSCPU_HOOK_TLB_INVPCID: u32 = 18;
+const_assert_eq!(BOCHSCPU_HOOK_TLB_INVPCID, TlbCntrl::InvPcid as u32);
 
 /// FFI Hook object
 ///
