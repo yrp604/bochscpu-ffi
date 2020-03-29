@@ -93,8 +93,8 @@ pub struct bochscpu_hooks_t {
 }
 
 impl Hooks for bochscpu_hooks_t {
-    fn reset(&mut self, id: u32, ty: u32) {
-        self.reset.map(|f| f(self.ctx, id, ty));
+    fn reset(&mut self, id: u32, ty: ResetSource) {
+        self.reset.map(|f| f(self.ctx, id, ty as u32));
     }
 
     fn hlt(&mut self, id: u32) {
