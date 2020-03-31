@@ -518,6 +518,20 @@ pub unsafe extern "C" fn bochscpu_cpu_set_idtr(p: bochscpu_cpu_t, s: *const boch
 // TODO crX/drX
 
 #[no_mangle]
+pub unsafe extern "C" fn bochscpu_cpu_cr2(p: bochscpu_cpu_t) -> u64 {
+    let c: ManuallyDrop<Box<Cpu>> = ManuallyDrop::new(Box::from_raw(p as _));
+
+    c.cr2()
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn bochscpu_cpu_set_cr2(p: bochscpu_cpu_t, val: u64) {
+    let c: ManuallyDrop<Box<Cpu>> = ManuallyDrop::new(Box::from_raw(p as _));
+
+    c.set_cr2(val)
+}
+
+#[no_mangle]
 pub unsafe extern "C" fn bochscpu_cpu_cr3(p: bochscpu_cpu_t) -> u64 {
     let c: ManuallyDrop<Box<Cpu>> = ManuallyDrop::new(Box::from_raw(p as _));
 
