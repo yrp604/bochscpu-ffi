@@ -117,6 +117,13 @@ pub unsafe extern "C" fn bochscpu_cpu_set_state(p: bochscpu_cpu_t, s: *const boc
 }
 
 #[no_mangle]
+pub unsafe extern "C" fn bochscpu_cpu_exception(p: bochscpu_cpu_t, vector: u32, error: u16) {
+    let c: ManuallyDrop<Box<Cpu>> = ManuallyDrop::new(Box::from_raw(p as _));
+
+    c.exception(vector, error)
+}
+
+#[no_mangle]
 pub unsafe extern "C" fn bochscpu_cpu_rax(p: bochscpu_cpu_t) -> u64 {
     let c: ManuallyDrop<Box<Cpu>> = ManuallyDrop::new(Box::from_raw(p as _));
 
