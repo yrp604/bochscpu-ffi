@@ -62,7 +62,7 @@ pub struct bochscpu_hooks_t {
     pub mwait: Option<extern "C" fn(*mut c_void, u32, u64, usize, u32)>,
 
     pub cnear_branch_taken: Option<extern "C" fn(*mut c_void, u32, u64, u64)>,
-    pub cnear_branch_not_taken: Option<extern "C" fn(*mut c_void, u32, u64)>,
+    pub cnear_branch_not_taken: Option<extern "C" fn(*mut c_void, u32, u64, u64)>,
     pub ucnear_branch: Option<extern "C" fn(*mut c_void, u32, u32, u64, u64)>,
     pub far_branch: Option<extern "C" fn(*mut c_void, u32, u32, u16, u64, u16, u64)>,
 
@@ -110,8 +110,8 @@ impl Hooks for bochscpu_hooks_t {
             .map(|f| f(self.ctx, id, branch_pc, new_pc));
     }
 
-    fn cnear_branch_not_taken(&mut self, id: u32, pc: Address) {
-        self.cnear_branch_not_taken.map(|f| f(self.ctx, id, pc));
+    fn cnear_branch_not_taken(&mut self, id: u32, pc: Address, new_pc: Address) {
+        self.cnear_branch_not_taken.map(|f| f(self.ctx, id, pc, new_pc));
     }
 
     fn ucnear_branch(&mut self, id: u32, what: Branch, branch_pc: Address, new_pc: Address) {
