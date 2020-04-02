@@ -66,7 +66,7 @@ pub struct bochscpu_hooks_t {
     pub ucnear_branch: Option<extern "C" fn(*mut c_void, u32, u32, u64, u64)>,
     pub far_branch: Option<extern "C" fn(*mut c_void, u32, u32, u16, u64, u16, u64)>,
 
-    pub opcode: Option<extern "C" fn(*mut c_void, u32, *mut c_void, *const u8, usize, bool, bool)>,
+    pub opcode: Option<extern "C" fn(*mut c_void, u32, *const c_void, *const u8, usize, bool, bool)>,
     pub interrupt: Option<extern "C" fn(*mut c_void, u32, u32)>,
     pub exception: Option<extern "C" fn(*mut c_void, u32, u32, u32)>,
     pub hw_interrupt: Option<extern "C" fn(*mut c_void, u32, u32, u16, u64)>,
