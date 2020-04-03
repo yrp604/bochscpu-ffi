@@ -3,7 +3,7 @@ use std::ffi::c_void;
 use bochscpu::opcode::*;
 
 #[allow(non_camel_case_types)]
-pub type bochscpu_instr_t = *mut c_void;
+pub type bochscpu_instr_t = *const c_void;
 
 #[no_mangle]
 pub unsafe extern "C" fn bochscpu_instr_bx_opcode(p: bochscpu_instr_t) -> u32 {
