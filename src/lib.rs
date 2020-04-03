@@ -10,10 +10,12 @@ extern crate static_assertions;
 ///   the guest
 mod cpu;
 mod hook;
+mod instr;
 mod mem;
 mod log;
 
 pub use crate::cpu::*;
 pub use crate::hook::*;
+pub use crate::instr::*;
 pub use crate::mem::*;
 pub use crate::log::*;

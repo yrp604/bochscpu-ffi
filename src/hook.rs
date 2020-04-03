@@ -139,7 +139,7 @@ impl Hooks for bochscpu_hooks_t {
         });
     }
 
-    fn opcode(&mut self, id: u32, ins: *mut c_void, opcode: &[u8], is_32: bool, is_64: bool) {
+    fn opcode(&mut self, id: u32, ins: *const c_void, opcode: &[u8], is_32: bool, is_64: bool) {
         self.opcode.map(|f| {
             f(
                 self.ctx,
