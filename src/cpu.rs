@@ -95,14 +95,6 @@ pub unsafe extern "C" fn bochscpu_cpu_stop(p: bochscpu_cpu_t) {
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn bochscpu_cpu_bail(p: bochscpu_cpu_t) {
-    let c: ManuallyDrop<Box<Cpu>> = ManuallyDrop::new(Box::from_raw(p as _));
-
-    c.set_run_state(RunState::Bail);
-}
-
-
-#[no_mangle]
 pub unsafe extern "C" fn bochscpu_cpu_state(p: bochscpu_cpu_t, s: *mut bochscpu_cpu_state_t) {
     let c: ManuallyDrop<Box<Cpu>> = ManuallyDrop::new(Box::from_raw(p as _));
 
@@ -120,14 +112,7 @@ pub unsafe extern "C" fn bochscpu_cpu_set_state(p: bochscpu_cpu_t, s: *const boc
 pub unsafe extern "C" fn bochscpu_cpu_set_exception(p: bochscpu_cpu_t, vector: u32, error: u16) {
     let c: ManuallyDrop<Box<Cpu>> = ManuallyDrop::new(Box::from_raw(p as _));
 
-    c.set_exception(Some((vector, Some(error))))
-}
-
-#[no_mangle]
-pub unsafe extern "C" fn bochscpu_cpu_clear_exception(p: bochscpu_cpu_t) {
-    let c: ManuallyDrop<Box<Cpu>> = ManuallyDrop::new(Box::from_raw(p as _));
-
-    c.set_exception(None)
+    c.set_exception(vector, Some(error))
 }
 
 #[no_mangle]
