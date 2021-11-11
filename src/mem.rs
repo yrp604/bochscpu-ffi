@@ -22,25 +22,6 @@ pub unsafe extern "C" fn bochscpu_mem_page_remove(gpa: u64) {
     page_remove(gpa)
 }
 
-/// Install a physical page fault handler
-///
-/// This function will be called any time a request is made to physical memory
-/// and the GPA is not present. This function should add a page using
-/// `bochscpu_mem_page_insert()`
-///
-/// The paramter should have the type `void handler(gpa_t)`
-///
-/// This allows you to lazily page in your backing physical memory.
-///
-/// # Note
-///
-/// This is a global singleton, and installing a new physical page fault
-/// handler will overwrite the existing handler.
-#[no_mangle]
-pub unsafe extern "C" fn bochscpu_mem_missing_page(handler: extern "C" fn(gpa: u64)) {
-    missing_page(move |gpa| handler(gpa))
-}
-
 /// Translate GPA to HVA
 ///
 /// # Panics
