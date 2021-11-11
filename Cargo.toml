@@ -11,10 +11,10 @@ crate-type = ["staticlib", "cdylib"]
 [dependencies]
 bochscpu = { path = "../bochscpu", features = ["serde"] }
 log = { version = "0.4", features = ["release_max_level_off"] }
-serde = "1.0"
+serde = "1"
 serde_yaml = "0.8"
 static_assertions = "1"
-stderrlog = "0.4"
+stderrlog = "0.5"
 
 [build-dependencies]
-cbindgen = "0.18"
+cbindgen = "0.20"
