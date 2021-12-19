@@ -90,8 +90,6 @@ pub struct bochscpu_hooks_t {
     pub wrmsr: Option<extern "C" fn(*mut c_void, u32, u32, u64)>,
 
     pub vmexit: Option<extern "C" fn(*mut c_void, u32, u32, u64)>,
-
-    pub missing_page: Option<extern "C" fn(*mut c_void, u64)>,
 }
 
 impl Hooks for bochscpu_hooks_t {
@@ -244,9 +242,5 @@ impl Hooks for bochscpu_hooks_t {
 
     fn vmexit(&mut self, id: u32, reason: u32, qualification: u64) {
         self.vmexit.map(|f| f(self.ctx, id, reason, qualification));
-    }
-
-    fn missing_page(&mut self, paddr: u64) {
-        self.missing_page.map(|f| f(self.ctx, paddr));
     }
 }
