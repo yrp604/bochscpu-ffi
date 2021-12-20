@@ -13,9 +13,11 @@ mod hook;
 mod instr;
 mod mem;
 mod log;
+mod opcode;
 
 pub use crate::cpu::*;
 pub use crate::hook::*;
 pub use crate::instr::*;
 pub use crate::mem::*;
 pub use crate::log::*;
+pub use crate::opcode::*;
