@@ -109,7 +109,10 @@ pub unsafe extern "C" fn bochscpu_cpu_set_state(p: bochscpu_cpu_t, s: *const boc
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn bochscpu_cpu_set_state_no_flush(p: bochscpu_cpu_t, s: *const bochscpu_cpu_state_t) {
+pub unsafe extern "C" fn bochscpu_cpu_set_state_no_flush(
+    p: bochscpu_cpu_t,
+    s: *const bochscpu_cpu_state_t,
+) {
     let c: ManuallyDrop<Box<Cpu>> = ManuallyDrop::new(Box::from_raw(p as _));
 
     c.set_state_no_flush(&*s)
@@ -120,6 +123,42 @@ pub unsafe extern "C" fn bochscpu_cpu_set_exception(p: bochscpu_cpu_t, vector: u
     let c: ManuallyDrop<Box<Cpu>> = ManuallyDrop::new(Box::from_raw(p as _));
 
     c.set_exception(vector, Some(error))
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn bochscpu_get_reg64(p: bochscpu_cpu_t, reg: GpRegs) -> u64 {
+    let c: ManuallyDrop<Box<Cpu>> = ManuallyDrop::new(Box::from_raw(p as _));
+    c.get_reg64(reg)
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn bochscpu_set_reg64(p: bochscpu_cpu_t, reg: GpRegs, val: u64) {
+    let c: ManuallyDrop<Box<Cpu>> = ManuallyDrop::new(Box::from_raw(p as _));
+    c.set_reg64(reg, val)
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn bochscpu_get_reg32(p: bochscpu_cpu_t, reg: GpRegs) -> u32 {
+    let c: ManuallyDrop<Box<Cpu>> = ManuallyDrop::new(Box::from_raw(p as _));
+    c.get_reg32(reg)
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn bochscpu_set_reg32(p: bochscpu_cpu_t, reg: GpRegs, val: u32) {
+    let c: ManuallyDrop<Box<Cpu>> = ManuallyDrop::new(Box::from_raw(p as _));
+    c.set_reg32(reg, val)
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn bochscpu_get_reg16(p: bochscpu_cpu_t, reg: GpRegs) -> u16 {
+    let c: ManuallyDrop<Box<Cpu>> = ManuallyDrop::new(Box::from_raw(p as _));
+    c.get_reg16(reg)
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn bochscpu_set_reg16(p: bochscpu_cpu_t, reg: GpRegs, val: u16) {
+    let c: ManuallyDrop<Box<Cpu>> = ManuallyDrop::new(Box::from_raw(p as _));
+    c.set_reg16(reg, val)
 }
 
 #[no_mangle]
@@ -494,7 +533,10 @@ pub unsafe extern "C" fn bochscpu_cpu_gdtr(p: bochscpu_cpu_t, s: *mut bochscpu_c
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn bochscpu_cpu_set_gdtr(p: bochscpu_cpu_t, s: *const bochscpu_cpu_global_seg_t) {
+pub unsafe extern "C" fn bochscpu_cpu_set_gdtr(
+    p: bochscpu_cpu_t,
+    s: *const bochscpu_cpu_global_seg_t,
+) {
     let c: ManuallyDrop<Box<Cpu>> = ManuallyDrop::new(Box::from_raw(p as _));
 
     c.set_gdtr(*s);
@@ -508,7 +550,10 @@ pub unsafe extern "C" fn bochscpu_cpu_idtr(p: bochscpu_cpu_t, s: *mut bochscpu_c
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn bochscpu_cpu_set_idtr(p: bochscpu_cpu_t, s: *const bochscpu_cpu_global_seg_t) {
+pub unsafe extern "C" fn bochscpu_cpu_set_idtr(
+    p: bochscpu_cpu_t,
+    s: *const bochscpu_cpu_global_seg_t,
+) {
     let c: ManuallyDrop<Box<Cpu>> = ManuallyDrop::new(Box::from_raw(p as _));
 
     c.set_idtr(*s);
@@ -545,7 +590,11 @@ pub unsafe extern "C" fn bochscpu_cpu_set_cr3(p: bochscpu_cpu_t, val: u64) {
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn bochscpu_cpu_zmm(p: bochscpu_cpu_t, idx: usize, z: *mut bochscpu_cpu_zmm_t) {
+pub unsafe extern "C" fn bochscpu_cpu_zmm(
+    p: bochscpu_cpu_t,
+    idx: usize,
+    z: *mut bochscpu_cpu_zmm_t,
+) {
     let c: ManuallyDrop<Box<Cpu>> = ManuallyDrop::new(Box::from_raw(p as _));
 
     *z = c.zmm(idx);

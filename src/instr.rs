@@ -1,5 +1,6 @@
 use std::ffi::{c_char, c_void};
 
+use bochscpu::cpu::GpRegs;
 use bochscpu::opcode::*;
 use bochscpu::Address;
 
@@ -27,13 +28,18 @@ pub unsafe extern "C" fn bochscpu_instr_imm64(p: bochscpu_instr_t) -> u64 {
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn bochscpu_instr_src(p: bochscpu_instr_t) -> u32 {
-    instr_src(p)
+pub unsafe extern "C" fn bochscpu_instr_src(p: bochscpu_instr_t) -> GpRegs {
+    GpRegs::from(instr_src(p))
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn bochscpu_instr_dst(p: bochscpu_instr_t) -> u32 {
-    instr_dst(p)
+pub unsafe extern "C" fn bochscpu_instr_dst(p: bochscpu_instr_t) -> GpRegs {
+    GpRegs::from(instr_dst(p))
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn bochscpu_instr_resolve_addr(p: bochscpu_instr_t) -> u64 {
+    instr_resolve_addr(p)
 }
 
 #[no_mangle]
