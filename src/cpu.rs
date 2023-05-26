@@ -58,6 +58,11 @@ pub unsafe extern "C" fn bochscpu_cpu_set_mode(p: bochscpu_cpu_t) {
     c.set_mode();
 }
 
+#[no_mangle]
+pub unsafe extern "C" fn bochscpu_total_gpregs() -> u32 {
+    cpu_total_gpregs()
+}
+
 /// Start emulation
 ///
 /// To hook emulation, pass in a NULL terminated list of one or more pointers to

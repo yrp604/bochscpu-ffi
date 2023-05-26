@@ -1,6 +1,5 @@
 use std::ffi::{c_char, c_void};
 
-use bochscpu::cpu::GpRegs;
 use bochscpu::opcode::*;
 use bochscpu::Address;
 
@@ -28,13 +27,23 @@ pub unsafe extern "C" fn bochscpu_instr_imm64(p: bochscpu_instr_t) -> u64 {
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn bochscpu_instr_src(p: bochscpu_instr_t) -> GpRegs {
-    GpRegs::from(instr_src(p))
+pub unsafe extern "C" fn bochscpu_instr_src(p: bochscpu_instr_t) -> u32 {
+    instr_src(p)
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn bochscpu_instr_dst(p: bochscpu_instr_t) -> GpRegs {
-    GpRegs::from(instr_dst(p))
+pub unsafe extern "C" fn bochscpu_instr_dst(p: bochscpu_instr_t) -> u32 {
+    instr_dst(p)
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn bochscpu_instr_seg(p: bochscpu_instr_t) -> u32 {
+    instr_seg(p)
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn bochscpu_instr_modC0(p: bochscpu_instr_t) -> u32 {
+    instr_modC0(p)
 }
 
 #[no_mangle]
@@ -53,4 +62,9 @@ pub unsafe extern "C" fn bochscpu_opcode_disasm(
     disasm_style: DisasmStyle,
 ) -> u32 {
     opcode_disasm_wrapper(is32, is64, cs_base, ip, instr_bytes, distbuf, disasm_style)
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn bochscpu_instr_dmp() {
+    instr_dmp()
 }
