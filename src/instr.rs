@@ -64,7 +64,7 @@ pub unsafe extern "C" fn bochscpu_opcode_disasm(
     opcode_disasm_wrapper(is32, is64, cs_base, ip, instr_bytes, distbuf, disasm_style)
 }
 
-#[no_mangle]
-pub unsafe extern "C" fn bochscpu_instr_dmp() {
-    instr_dmp()
-}
+// #[no_mangle]
+// pub unsafe extern "C" fn bochscpu_instr_dmp() {
+//     instr_dmp()
+// }
