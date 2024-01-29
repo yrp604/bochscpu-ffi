@@ -16,6 +16,8 @@ pub type bochscpu_cpu_seg_t = Seg;
 pub type bochscpu_cpu_global_seg_t = GlobalSeg;
 #[allow(non_camel_case_types)]
 pub type bochscpu_cpu_zmm_t = Zmm;
+#[allow(non_camel_case_types)]
+pub type bochscpu_cpu_float80_t = Float80;
 
 /// Create a new Cpu
 ///
@@ -563,3 +565,20 @@ pub unsafe extern "C" fn bochscpu_cpu_set_zmm(
 }
 
 // TODO fp/msr
+#[no_mangle]
+pub unsafe extern "C" fn bochscpu_cpu_fp_st(p: bochscpu_cpu_t, idx: usize, f: *mut bochscpu_cpu_float80_t) {
+    let c: ManuallyDrop<Box<Cpu>> = ManuallyDrop::new(Box::from_raw(p as _));
+
+    *f = c.fp_st(idx);
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn bochscpu_cpu_set_fp_st(
+    p: bochscpu_cpu_t,
+    idx: usize,
+    f: *const bochscpu_cpu_float80_t,
+) {
+    let c: ManuallyDrop<Box<Cpu>> = ManuallyDrop::new(Box::from_raw(p as _));
+
+    c.set_fp_st(idx, *f)
+}
