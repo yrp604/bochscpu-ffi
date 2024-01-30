@@ -582,3 +582,71 @@ pub unsafe extern "C" fn bochscpu_cpu_set_fp_st(
 
     c.set_fp_st(idx, *f)
 }
+
+#[no_mangle]
+pub unsafe extern "C" fn bochscpu_cpu_fp_cw(p: bochscpu_cpu_t) -> u16 {
+    let c: ManuallyDrop<Box<Cpu>> = ManuallyDrop::new(Box::from_raw(p as _));
+
+    c.fp_cw()
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn bochscpu_cpu_set_fp_cw(
+    p: bochscpu_cpu_t,
+    f: u16
+) {
+    let c: ManuallyDrop<Box<Cpu>> = ManuallyDrop::new(Box::from_raw(p as _));
+
+    c.set_fp_cw(f)
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn bochscpu_cpu_fp_sw(p: bochscpu_cpu_t) -> u16 {
+    let c: ManuallyDrop<Box<Cpu>> = ManuallyDrop::new(Box::from_raw(p as _));
+
+    c.fp_sw()
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn bochscpu_cpu_set_fp_sw(
+    p: bochscpu_cpu_t,
+    f: u16
+) {
+    let c: ManuallyDrop<Box<Cpu>> = ManuallyDrop::new(Box::from_raw(p as _));
+
+    c.set_fp_sw(f)
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn bochscpu_cpu_fp_tw(p: bochscpu_cpu_t) -> u16 {
+    let c: ManuallyDrop<Box<Cpu>> = ManuallyDrop::new(Box::from_raw(p as _));
+
+    c.fp_tw()
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn bochscpu_cpu_set_fp_tw(
+    p: bochscpu_cpu_t,
+    f: u16
+) {
+    let c: ManuallyDrop<Box<Cpu>> = ManuallyDrop::new(Box::from_raw(p as _));
+
+    c.set_fp_tw(f)
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn bochscpu_cpu_fp_op(p: bochscpu_cpu_t) -> u16 {
+    let c: ManuallyDrop<Box<Cpu>> = ManuallyDrop::new(Box::from_raw(p as _));
+
+    c.fp_op()
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn bochscpu_cpu_set_fp_op(
+    p: bochscpu_cpu_t,
+    f: u16
+) {
+    let c: ManuallyDrop<Box<Cpu>> = ManuallyDrop::new(Box::from_raw(p as _));
+
+    c.set_fp_op(f)
+}
