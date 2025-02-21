@@ -10,17 +10,17 @@ use bochscpu::mem::*;
 ///
 /// Panics if the added page is not page aligned.
 #[unsafe(no_mangle)]
-pub unsafe extern "C" fn bochscpu_mem_page_insert(gpa: u64, hva: *mut u8) { unsafe {
-    page_insert(gpa, hva)
-}}
+pub unsafe extern "C" fn bochscpu_mem_page_insert(gpa: u64, hva: *mut u8) {
+    unsafe { page_insert(gpa, hva) }
+}
 
 /// Delete GPA mapping
 ///
 /// If the GPA is not valid, this is a no-op.
 #[unsafe(no_mangle)]
-pub unsafe extern "C" fn bochscpu_mem_page_remove(gpa: u64) { unsafe {
-    page_remove(gpa)
-}}
+pub unsafe extern "C" fn bochscpu_mem_page_remove(gpa: u64) {
+    unsafe { page_remove(gpa) }
+}
 
 /// Install a physical page fault handler
 ///
@@ -37,9 +37,9 @@ pub unsafe extern "C" fn bochscpu_mem_page_remove(gpa: u64) { unsafe {
 /// This is a global singleton, and installing a new physical page fault
 /// handler will overwrite the existing handler.
 #[unsafe(no_mangle)]
-pub unsafe extern "C" fn bochscpu_mem_missing_page(handler: extern "C" fn(gpa: u64)) { unsafe {
-    missing_page(move |gpa| handler(gpa))
-}}
+pub unsafe extern "C" fn bochscpu_mem_missing_page(handler: extern "C" fn(gpa: u64)) {
+    unsafe { missing_page(move |gpa| handler(gpa)) }
+}
 
 /// Translate GPA to HVA
 ///
@@ -51,9 +51,9 @@ pub unsafe extern "C" fn bochscpu_mem_missing_page(handler: extern "C" fn(gpa: u
 ///
 /// # Example
 #[unsafe(no_mangle)]
-pub unsafe extern "C" fn bochscpu_mem_phy_translate(gpa: u64) -> *mut u8 { unsafe {
-    phy_translate(gpa)
-}}
+pub unsafe extern "C" fn bochscpu_mem_phy_translate(gpa: u64) -> *mut u8 {
+    unsafe { phy_translate(gpa) }
+}
 
 /// Translate GVA to GPA
 ///
@@ -78,10 +78,12 @@ pub unsafe extern "C" fn bochscpu_mem_virt_translate(cr3: u64, gva: u64) -> u64 
 /// that function does not exist or does not resolve the fault, this routine
 /// will panic
 #[unsafe(no_mangle)]
-pub unsafe extern "C" fn bochscpu_mem_phy_read(gpa: u64, hva: *mut u8, sz: usize) { unsafe {
-    let s = slice::from_raw_parts_mut(hva, sz);
-    phy_read_slice(gpa, s);
-}}
+pub unsafe extern "C" fn bochscpu_mem_phy_read(gpa: u64, hva: *mut u8, sz: usize) {
+    unsafe {
+        let s = slice::from_raw_parts_mut(hva, sz);
+        phy_read_slice(gpa, s);
+    }
+}
 
 /// Write to GPA
 ///
@@ -91,10 +93,12 @@ pub unsafe extern "C" fn bochscpu_mem_phy_read(gpa: u64, hva: *mut u8, sz: usize
 /// that function does not exist or does not resolve the fault, this routine
 /// will panic
 #[unsafe(no_mangle)]
-pub unsafe extern "C" fn bochscpu_mem_phy_write(gpa: u64, hva: *const u8, sz: usize) { unsafe {
-    let s = slice::from_raw_parts(hva, sz);
-    phy_write(gpa, s);
-}}
+pub unsafe extern "C" fn bochscpu_mem_phy_write(gpa: u64, hva: *const u8, sz: usize) {
+    unsafe {
+        let s = slice::from_raw_parts(hva, sz);
+        phy_write(gpa, s);
+    }
+}
 
 /// Write to GVA
 ///
@@ -109,14 +113,16 @@ pub unsafe extern "C" fn bochscpu_mem_virt_write(
     gva: u64,
     hva: *const u8,
     sz: usize,
-) -> i32 { unsafe {
-    let s = slice::from_raw_parts(hva, sz);
+) -> i32 {
+    unsafe {
+        let s = slice::from_raw_parts(hva, sz);
 
-    match virt_write_checked(cr3, gva, s) {
-        Ok(_) => 0,
-        Err(_) => -1,
+        match virt_write_checked(cr3, gva, s) {
+            Ok(_) => 0,
+            Err(_) => -1,
+        }
     }
-}}
+}
 
 /// Read from GVA
 ///
@@ -131,11 +137,13 @@ pub unsafe extern "C" fn bochscpu_mem_virt_read(
     gva: u64,
     hva: *mut u8,
     sz: usize,
-) -> i32 { unsafe {
-    let s = slice::from_raw_parts_mut(hva, sz);
+) -> i32 {
+    unsafe {
+        let s = slice::from_raw_parts_mut(hva, sz);
 
-    match virt_read_slice_checked(cr3, gva, s) {
-        Ok(_) => 0,
-        Err(_) => -1,
+        match virt_read_slice_checked(cr3, gva, s) {
+            Ok(_) => 0,
+            Err(_) => -1,
+        }
     }
-}}
+}

@@ -62,7 +62,10 @@ pub const BOCHSCPU_HOOK_TLB_TASKSWITCH: u32 = 13;
 const_assert_eq!(BOCHSCPU_HOOK_TLB_TASKSWITCH, TlbCntrl::TaskSwitch as u32);
 
 pub const BOCHSCPU_HOOK_TLB_CONTEXTSWITCH: u32 = 14;
-const_assert_eq!(BOCHSCPU_HOOK_TLB_CONTEXTSWITCH, TlbCntrl::ContextSwitch as u32);
+const_assert_eq!(
+    BOCHSCPU_HOOK_TLB_CONTEXTSWITCH,
+    TlbCntrl::ContextSwitch as u32
+);
 
 pub const BOCHSCPU_HOOK_TLB_INVLPG: u32 = 15;
 const_assert_eq!(BOCHSCPU_HOOK_TLB_INVLPG, TlbCntrl::InvLpg as u32);
@@ -99,7 +102,8 @@ pub struct bochscpu_hooks_t {
     pub ucnear_branch: Option<extern "C" fn(*mut c_void, u32, u32, u64, u64)>,
     pub far_branch: Option<extern "C" fn(*mut c_void, u32, u32, u16, u64, u16, u64)>,
 
-    pub opcode: Option<extern "C" fn(*mut c_void, u32, *const c_void, *const u8, usize, bool, bool)>,
+    pub opcode:
+        Option<extern "C" fn(*mut c_void, u32, *const c_void, *const u8, usize, bool, bool)>,
     pub interrupt: Option<extern "C" fn(*mut c_void, u32, u32)>,
     pub exception: Option<extern "C" fn(*mut c_void, u32, u32, u32)>,
     pub hw_interrupt: Option<extern "C" fn(*mut c_void, u32, u32, u16, u64)>,
@@ -144,7 +148,8 @@ impl Hooks for bochscpu_hooks_t {
     }
 
     fn cnear_branch_not_taken(&mut self, id: u32, pc: Address, new_pc: Address) {
-        self.cnear_branch_not_taken.map(|f| f(self.ctx, id, pc, new_pc));
+        self.cnear_branch_not_taken
+            .map(|f| f(self.ctx, id, pc, new_pc));
     }
 
     fn ucnear_branch(&mut self, id: u32, what: Branch, branch_pc: Address, new_pc: Address) {

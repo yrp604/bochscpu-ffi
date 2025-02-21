@@ -11,13 +11,13 @@ extern crate static_assertions;
 mod cpu;
 mod hook;
 mod instr;
-mod mem;
 mod log;
+mod mem;
 mod opcode;
 
 pub use crate::cpu::*;
 pub use crate::hook::*;
 pub use crate::instr::*;
-pub use crate::mem::*;
 pub use crate::log::*;
+pub use crate::mem::*;
 pub use crate::opcode::*;
