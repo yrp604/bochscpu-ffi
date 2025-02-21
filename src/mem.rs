@@ -9,17 +9,17 @@ use bochscpu::mem::*;
 /// # Panics
 ///
 /// Panics if the added page is not page aligned.
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub unsafe extern "C" fn bochscpu_mem_page_insert(gpa: u64, hva: *mut u8) {
-    page_insert(gpa, hva)
+    unsafe { page_insert(gpa, hva) }
 }
 
 /// Delete GPA mapping
 ///
 /// If the GPA is not valid, this is a no-op.
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub unsafe extern "C" fn bochscpu_mem_page_remove(gpa: u64) {
-    page_remove(gpa)
+    unsafe { page_remove(gpa) }
 }
 
 /// Install a physical page fault handler
@@ -36,9 +36,9 @@ pub unsafe extern "C" fn bochscpu_mem_page_remove(gpa: u64) {
 ///
 /// This is a global singleton, and installing a new physical page fault
 /// handler will overwrite the existing handler.
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub unsafe extern "C" fn bochscpu_mem_missing_page(handler: extern "C" fn(gpa: u64)) {
-    missing_page(move |gpa| handler(gpa))
+    unsafe { missing_page(move |gpa| handler(gpa)) }
 }
 
 /// Translate GPA to HVA
@@ -50,9 +50,9 @@ pub unsafe extern "C" fn bochscpu_mem_missing_page(handler: extern "C" fn(gpa: u
 /// appropriate page, this will panic.
 ///
 /// # Example
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub unsafe extern "C" fn bochscpu_mem_phy_translate(gpa: u64) -> *mut u8 {
-    phy_translate(gpa)
+    unsafe { phy_translate(gpa) }
 }
 
 /// Translate GVA to GPA
@@ -62,7 +62,7 @@ pub unsafe extern "C" fn bochscpu_mem_phy_translate(gpa: u64) -> *mut u8 {
 /// # Returns
 ///
 /// Translated gpa on success, -1 on failure
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub unsafe extern "C" fn bochscpu_mem_virt_translate(cr3: u64, gva: u64) -> u64 {
     match virt_translate_checked(cr3, gva) {
         Ok(a) => a,
@@ -77,10 +77,12 @@ pub unsafe extern "C" fn bochscpu_mem_virt_translate(cr3: u64, gva: u64) -> u64 
 /// If the GPA does not exist, it will call the missing page function. If
 /// that function does not exist or does not resolve the fault, this routine
 /// will panic
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub unsafe extern "C" fn bochscpu_mem_phy_read(gpa: u64, hva: *mut u8, sz: usize) {
-    let s = slice::from_raw_parts_mut(hva, sz);
-    phy_read_slice(gpa, s);
+    unsafe {
+        let s = slice::from_raw_parts_mut(hva, sz);
+        phy_read_slice(gpa, s);
+    }
 }
 
 /// Write to GPA
@@ -90,10 +92,12 @@ pub unsafe extern "C" fn bochscpu_mem_phy_read(gpa: u64, hva: *mut u8, sz: usize
 /// If the GPA does not exist, it will call the missing page function. If
 /// that function does not exist or does not resolve the fault, this routine
 /// will panic
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub unsafe extern "C" fn bochscpu_mem_phy_write(gpa: u64, hva: *const u8, sz: usize) {
-    let s = slice::from_raw_parts(hva, sz);
-    phy_write(gpa, s);
+    unsafe {
+        let s = slice::from_raw_parts(hva, sz);
+        phy_write(gpa, s);
+    }
 }
 
 /// Write to GVA
@@ -103,18 +107,20 @@ pub unsafe extern "C" fn bochscpu_mem_phy_write(gpa: u64, hva: *const u8, sz: us
 /// # Returns
 ///
 /// Zero on success, non-zero on failure
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub unsafe extern "C" fn bochscpu_mem_virt_write(
     cr3: u64,
     gva: u64,
     hva: *const u8,
     sz: usize,
 ) -> i32 {
-    let s = slice::from_raw_parts(hva, sz);
+    unsafe {
+        let s = slice::from_raw_parts(hva, sz);
 
-    match virt_write_checked(cr3, gva, s) {
-        Ok(_) => 0,
-        Err(_) => -1,
+        match virt_write_checked(cr3, gva, s) {
+            Ok(_) => 0,
+            Err(_) => -1,
+        }
     }
 }
 
@@ -125,17 +131,19 @@ pub unsafe extern "C" fn bochscpu_mem_virt_write(
 /// # Returns
 ///
 /// Zero on success, non-zero on failure
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub unsafe extern "C" fn bochscpu_mem_virt_read(
     cr3: u64,
     gva: u64,
     hva: *mut u8,
     sz: usize,
 ) -> i32 {
-    let s = slice::from_raw_parts_mut(hva, sz);
+    unsafe {
+        let s = slice::from_raw_parts_mut(hva, sz);
 
-    match virt_read_slice_checked(cr3, gva, s) {
-        Ok(_) => 0,
-        Err(_) => -1,
+        match virt_read_slice_checked(cr3, gva, s) {
+            Ok(_) => 0,
+            Err(_) => -1,
+        }
     }
 }
