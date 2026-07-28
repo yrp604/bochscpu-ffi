@@ -4,38 +4,47 @@ use bochscpu::hook::*;
 use bochscpu::{Address, PhyAddress};
 
 // these have to be hard coded otherwise cbindgen wont pick up on them
-pub const BX_INSTR_IS_JMP: u32 = 10;
+pub const BX_INSTR_IS_JMP_CONDITIONAL_NOT_TAKEN: u32 = 10;
+const_assert_eq!(BX_INSTR_IS_JMP_CONDITIONAL_NOT_TAKEN, Branch::JmpConditionalNotTaken as u32);
+
+pub const BX_INSTR_IS_JMP_CONDITIONAL_TAKEN: u32 = 11;
+const_assert_eq!(BX_INSTR_IS_JMP_CONDITIONAL_TAKEN, Branch::JmpConditionalTaken as u32);
+
+pub const BX_INSTR_IS_JMP: u32 = 12;
 const_assert_eq!(BX_INSTR_IS_JMP, Branch::Jmp as u32);
 
-pub const BOCHSCPU_INSTR_IS_JMP_INDIRECT: u32 = 11;
+pub const BOCHSCPU_INSTR_IS_JMP_INDIRECT: u32 = 13;
 const_assert_eq!(BOCHSCPU_INSTR_IS_JMP_INDIRECT, Branch::JmpIndirect as u32);
 
-pub const BOCHSCPU_INSTR_IS_CALL: u32 = 12;
+pub const BOCHSCPU_INSTR_IS_CALL: u32 = 14;
 const_assert_eq!(BOCHSCPU_INSTR_IS_CALL, Branch::Call as u32);
 
-pub const BOCHSCPU_INSTR_IS_CALL_INDIRECT: u32 = 13;
+pub const BOCHSCPU_INSTR_IS_CALL_INDIRECT: u32 = 15;
 const_assert_eq!(BOCHSCPU_INSTR_IS_CALL_INDIRECT, Branch::CallIndirect as u32);
 
-pub const BOCHSCPU_INSTR_IS_RET: u32 = 14;
+pub const BOCHSCPU_INSTR_IS_RET: u32 = 16;
 const_assert_eq!(BOCHSCPU_INSTR_IS_RET, Branch::Ret as u32);
 
-pub const BOCHSCPU_INSTR_IS_IRET: u32 = 15;
+pub const BOCHSCPU_INSTR_IS_IRET: u32 = 17;
 const_assert_eq!(BOCHSCPU_INSTR_IS_IRET, Branch::Iret as u32);
 
-pub const BOCHSCPU_INSTR_IS_INT: u32 = 16;
+pub const BOCHSCPU_INSTR_IS_INT: u32 = 18;
 const_assert_eq!(BOCHSCPU_INSTR_IS_INT, Branch::Int as u32);
 
-pub const BOCHSCPU_INSTR_IS_SYSCALL: u32 = 17;
+pub const BOCHSCPU_INSTR_IS_SYSCALL: u32 = 19;
 const_assert_eq!(BOCHSCPU_INSTR_IS_SYSCALL, Branch::Syscall as u32);
 
-pub const BOCHSCPU_INSTR_IS_SYSRET: u32 = 18;
+pub const BOCHSCPU_INSTR_IS_SYSRET: u32 = 20;
 const_assert_eq!(BOCHSCPU_INSTR_IS_SYSRET, Branch::Sysret as u32);
 
-pub const BOCHSCPU_INSTR_IS_SYSENTER: u32 = 19;
+pub const BOCHSCPU_INSTR_IS_SYSENTER: u32 = 21;
 const_assert_eq!(BOCHSCPU_INSTR_IS_SYSENTER, Branch::Sysenter as u32);
 
-pub const BOCHSCPU_INSTR_IS_SYSEXIT: u32 = 20;
+pub const BOCHSCPU_INSTR_IS_SYSEXIT: u32 = 22;
 const_assert_eq!(BOCHSCPU_INSTR_IS_SYSEXIT, Branch::Sysexit as u32);
+
+pub const BOCHSCPU_INSTR_IS_UIRET : u32 = 23;
+const_assert_eq!(BOCHSCPU_INSTR_IS_UIRET, Branch::Uiret as u32);
 
 pub const BOCHSCPU_HOOK_MEM_READ: u32 = 0;
 const_assert_eq!(BOCHSCPU_HOOK_MEM_READ, MemAccess::Read as u32);
@@ -88,7 +97,7 @@ const_assert_eq!(BOCHSCPU_HOOK_TLB_INVPCID, TlbCntrl::InvPcid as u32);
 /// ctx field will be passed as the first paramter to every hook and is fully
 /// controlled by the API author
 #[allow(non_camel_case_types)]
-#[derive(Clone, Debug, Eq, Hash, PartialEq)]
+#[derive(Clone, Debug, Hash)]
 #[repr(C)]
 pub struct bochscpu_hooks_t {
     pub ctx: *mut c_void,
@@ -97,9 +106,8 @@ pub struct bochscpu_hooks_t {
     pub hlt: Option<extern "C" fn(*mut c_void, u32)>,
     pub mwait: Option<extern "C" fn(*mut c_void, u32, u64, usize, u32)>,
 
-    pub cnear_branch_taken: Option<extern "C" fn(*mut c_void, u32, u64, u64)>,
-    pub cnear_branch_not_taken: Option<extern "C" fn(*mut c_void, u32, u64, u64)>,
-    pub ucnear_branch: Option<extern "C" fn(*mut c_void, u32, u32, u64, u64)>,
+    pub branch_taken: Option<extern "C" fn(*mut c_void, u32, u32, u64, u64)>,
+    pub branch_not_taken: Option<extern "C" fn(*mut c_void, u32, u32, u64, u64)>,
     pub far_branch: Option<extern "C" fn(*mut c_void, u32, u32, u16, u64, u16, u64)>,
 
     pub opcode:
@@ -142,19 +150,14 @@ impl Hooks for bochscpu_hooks_t {
         self.mwait.map(|f| f(self.ctx, id, addr, len, flags));
     }
 
-    fn cnear_branch_taken(&mut self, id: u32, branch_pc: Address, new_pc: Address) {
-        self.cnear_branch_taken
-            .map(|f| f(self.ctx, id, branch_pc, new_pc));
-    }
-
-    fn cnear_branch_not_taken(&mut self, id: u32, pc: Address, new_pc: Address) {
-        self.cnear_branch_not_taken
-            .map(|f| f(self.ctx, id, pc, new_pc));
-    }
-
-    fn ucnear_branch(&mut self, id: u32, what: Branch, branch_pc: Address, new_pc: Address) {
-        self.ucnear_branch
+    fn branch_taken(&mut self, id: u32, what: Branch, branch_pc: Address, new_pc: Address) {
+        self.branch_taken
             .map(|f| f(self.ctx, id, what as u32, branch_pc, new_pc));
+    }
+
+    fn branch_not_taken(&mut self, id: u32, what: Branch, pc: Address, new_pc: Address) {
+        self.branch_not_taken
+            .map(|f| f(self.ctx, id, what as u32, pc, new_pc));
     }
 
     fn far_branch(
