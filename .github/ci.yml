@@ -1,0 +1,93 @@
+name: CI Build
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+  pull_request:
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        variant:
+          - { os: windows-latest, arch: x64, crt: MT }
+          - { os: windows-latest, arch: x64, crt: MD }
+          - { os: windows-11-arm, arch: arm64, crt: MT }
+          - { os: windows-11-arm, arch: arm64, crt: MD }
+          - { os: ubuntu-latest, arch: x64  }
+          - { os: ubuntu-24.04-arm, arch: arm64 }
+          - { os: macos-latest, arch: arm64  }
+    runs-on: ${{ matrix.variant.os }}
+    name: ${{ matrix.variant.os }} / ${{ matrix.variant.arch }} ${{ matrix.variant.crt }}
+    env:
+      RUSTUP_TOOLCHAIN: stable
+    steps:
+      - name: Checkout (repo under test)
+        uses: actions/checkout@v4
+
+      - name: Determine dependency branch
+        run: |
+          if [ "${{ github.ref_name }}" = "main" ]; then
+            echo "DEP_BRANCH=main" >> $GITHUB_ENV
+          else
+            echo "DEP_BRANCH=dev" >> $GITHUB_ENV
+          fi
+        shell: bash
+
+      - name: Checkout bochscpu dependency
+        uses: actions/checkout@v4
+        with:
+          repository: 'yrp604/bochscpu'
+          ref: ${{ env.DEP_BRANCH }}
+          path: ../bochscpu
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 1
+
+      - name: Setup Rust toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+
+      - name: Configure CRT flags (Windows)
+        if: ${{ startsWith(matrix.variant.os, 'windows-') }}
+        run: |
+          if [ "${{ matrix.variant.crt }}" = "MT" ]; then
+            echo "RUSTFLAGS=-C link-arg=/MT -C target-feature=+crt-static" >> $GITHUB_ENV
+          else
+            echo "RUSTFLAGS=-C link-arg=/MD -C target-feature=-crt-static" >> $GITHUB_ENV
+          fi
+        shell: bash
+
+      - name: Build (release)
+        run: cargo build --release --target ${{ matrix.variant.target }}
+
+      - name: Prepare artifact (Linux/Mac)
+        if: ${{ !startsWith(matrix.variant.os, 'windows-') }}
+        run: |
+          mkdir -p artifact
+          cp -r target/${{ matrix.variant.target }}/release/* artifact/ || true
+        shell: bash
+
+      - name: Prepare artifact (Windows)
+        if: ${{ startsWith(matrix.variant.os, 'windows-') }}
+        run: |
+          New-Item -ItemType Directory -Force -Path artifact
+          Copy-Item -Path "target\\${{ matrix.variant.target }}\\release\\*" -Destination artifact -Recurse -Force
+        shell: powershell
+
+      - name: Upload artifacts (Windows)
+        if: ${{ startsWith(matrix.variant.os, 'windows-') }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: bochscpu-ffi-${{ matrix.variant.os }}-${{ matrix.variant.arch }}-${{ matrix.variant.crt}}
+          path: artifact
+
+      - name: Upload artifacts (Linux/Mac)
+        if: ${{ !startsWith(matrix.variant.os, 'windows-') }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: bochscpu-ffi-${{ matrix.variant.os }}-${{ matrix.variant.arch }}
+          path: artifact
