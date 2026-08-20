@@ -35,10 +35,10 @@ jobs:
 
       - name: Determine dependency branch
         run: |
-          if [ "${{ github.ref_name }}" = "main" ]; then
-            echo "DEP_BRANCH=main" >> $GITHUB_ENV
-          else
+          if [ "${{ github.base_ref }}" = "ref/heads/dev" ]; then
             echo "DEP_BRANCH=dev" >> $GITHUB_ENV
+          else
+            echo "DEP_BRANCH=main" >> $GITHUB_ENV
           fi
         shell: bash
 
@@ -50,7 +50,7 @@ jobs:
           ref: ${{ env.DEP_BRANCH }}
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - if: github.ref != 'refs/heads/main' && !startsWith(matrix.variant.os, 'windows-')
+      - if: github.base_ref != 'refs/heads/main' && !startsWith(matrix.variant.os, 'windows-')
         run: |
           gh api repos/yrp604/bochscpu-build/actions/artifacts \
             --jq '.artifacts[] | select(.name=="bochscpu-build-${{ matrix.variant.os }}-${{ matrix.variant.arch }}") | .id' \
@@ -61,7 +61,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.BOCHSCPU_BUILD }}
 
-      - if: github.ref != 'refs/heads/main' && startsWith(matrix.variant.os, 'windows-')
+      - if: github.base_ref != 'refs/heads/main' && startsWith(matrix.variant.os, 'windows-')
         run: |
           $artifactId = gh api repos/yrp604/bochscpu-build/actions/artifacts `
             --jq '.artifacts[] | select(.name=="bochscpu-build-${{ matrix.variant.os }}-${{ matrix.variant.arch }}-${{ matrix.variant.crt }}") | .id ' | Select-Object -First 1
