@@ -37,7 +37,7 @@ jobs:
       - name: Determine dependency branch
         run: |
           if [ "${{ github.event_name }}" = "pull_request" ]; then
-            if [ "${{ github.base_ref }}" = "dev" ] || [ "${{ github.ref }}" = "refs/heads/dev" ]; then
+            if [ "${{ github.base_ref }}" = "dev" ] || [ "${{ github.head_ref }}" = "dev" ]; then
               echo "DEP_BRANCH=dev" >> $GITHUB_ENV
             else
               echo "DEP_BRANCH=main" >> $GITHUB_ENV
