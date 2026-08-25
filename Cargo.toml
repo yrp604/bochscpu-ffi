@@ -6,7 +6,7 @@ edition = "2024"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 [lib]
-crate-type = ["staticlib", "cdylib"]
+crate-type = ["staticlib"]
 
 [dependencies]
 bochscpu = { path = "../bochscpu", features = ["serde"] }
@@ -17,4 +17,4 @@ static_assertions = "1"
 stderrlog = "0.6"
 
 [build-dependencies]
-cbindgen = "0.28"
+cbindgen = "0.29"
