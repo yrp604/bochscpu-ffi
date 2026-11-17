@@ -129,8 +129,8 @@ pub struct bochscpu_hooks_t {
     pub inp2: Option<extern "C" fn(*mut c_void, u16, usize, u32)>,
     pub outp: Option<extern "C" fn(*mut c_void, u16, usize, u32)>,
 
-    pub lin_access: Option<extern "C" fn(*mut c_void, u32, u64, u64, usize, u32, u32)>,
-    pub phy_access: Option<extern "C" fn(*mut c_void, u32, u64, usize, u32, u32)>,
+    pub lin_access: Option<extern "C" fn(*mut c_void, u32, u64, u64, usize, u32, u32, *const u8)>,
+    pub phy_access: Option<extern "C" fn(*mut c_void, u32, u64, usize, u32, u32, *const u8)>,
 
     pub wrmsr: Option<extern "C" fn(*mut c_void, u32, u32, u64)>,
 
@@ -260,9 +260,20 @@ impl Hooks for bochscpu_hooks_t {
         len: usize,
         memty: MemType,
         rw: MemAccess,
+        data: &[u8],
     ) {
-        self.lin_access
-            .map(|f| f(self.ctx, id, vaddr, paddr, len, memty as u32, rw as u32));
+        self.lin_access.map(|f| {
+            f(
+                self.ctx,
+                id,
+                vaddr,
+                paddr,
+                len,
+                memty as u32,
+                rw as u32,
+                data.as_ptr(),
+            )
+        });
     }
 
     fn phy_access(
@@ -272,9 +283,19 @@ impl Hooks for bochscpu_hooks_t {
         len: usize,
         memty: MemType,
         rw: MemAccess,
+        data: &[u8],
     ) {
-        self.phy_access
-            .map(|f| f(self.ctx, id, paddr, len, memty as u32, rw as u32));
+        self.phy_access.map(|f| {
+            f(
+                self.ctx,
+                id,
+                paddr,
+                len,
+                memty as u32,
+                rw as u32,
+                data.as_ptr(),
+            )
+        });
     }
 
     fn wrmsr(&mut self, id: u32, msr: u32, val: u64) {
